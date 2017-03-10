@@ -38,18 +38,18 @@ public class OAuth2SecurityConfiguration extends AuthorizationServerConfigurerAd
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
+		security.allowFormAuthenticationForClients().tokenKeyAccess("permitAll()")
+				.checkTokenAccess("isAuthenticated()");
 	}
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource).withClient("clientapp")
-        .authorizedGrantTypes("password", "refresh_token")
-        .authorities("USER")
-        .scopes("read", "write")
-        .resourceIds("oauth2-resource")
-        .secret("123456");
-;
+		clients.jdbc(dataSource).withClient("clientapp").authorizedGrantTypes("password", "refresh_token")
+				.authorities("ADMIN").scopes("read", "write").resourceIds("oauth2-resource").secret("123456")
+				.accessTokenValiditySeconds(120)
+				.autoApprove(true)
+				.redirectUris("http://makersweb.com.br")
+				.refreshTokenValiditySeconds(60);
 	}
 
 	@Override
