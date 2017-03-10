@@ -43,7 +43,13 @@ public class OAuth2SecurityConfiguration extends AuthorizationServerConfigurerAd
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource);
+		clients.jdbc(dataSource).withClient("clientapp")
+        .authorizedGrantTypes("password", "refresh_token")
+        .authorities("USER")
+        .scopes("read", "write")
+        .resourceIds("oauth2-resource")
+        .secret("123456");
+;
 	}
 
 	@Override
